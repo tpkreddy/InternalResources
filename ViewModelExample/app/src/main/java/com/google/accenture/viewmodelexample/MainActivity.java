@@ -2,6 +2,7 @@ package com.google.accenture.viewmodelexample;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.os.Bundle;
 import android.view.View;
@@ -11,12 +12,15 @@ import com.google.accenture.viewmodelexample.databinding.ActivityMainBinding;
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     private ActivityMainBinding binding;
-    private int count = 0;
+
+    private MainViewModel mvm;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         /*setContentView(R.layout.activity_main);*/
         binding = DataBindingUtil.setContentView(this,R.layout.activity_main);
+        mvm = new ViewModelProvider(this).get(MainViewModel.class);
+        binding.result.setText(String.valueOf(mvm.getCount()));
         binding.plus.setOnClickListener(this);
         binding.minus.setOnClickListener(this);
     }
@@ -24,10 +28,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onClick(View v) {
         if(v.getId() == R.id.plus){
-            count++;
+            mvm.increment();
         }else{
-            count--;
+            mvm.decrement();
         }
-        binding.result.setText(String.valueOf(count));
+        binding.result.setText(String.valueOf(mvm.getCount()));
     }
 }
